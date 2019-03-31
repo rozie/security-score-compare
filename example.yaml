@@ -1,0 +1,13 @@
+platforms:
+  rootme:
+    regexp: 'Score.*?<span>(\d+)</span>'
+    nicks:
+      nick_A: "https://www.root-me.org/XXX-nick_A"
+      nick_B: "https://www.root-me.org/XXX-nick_B"
+  ringzeroctf:
+    regexp: 'Points.*?<span class="points">(\d+)</span>'
+    nicks:
+     nick_A: "https://ringzer0ctf.com/profile/XXXX/nick_A"
+     nick_B: "https://ringzer0ctf.com/profile/YYYY/nick_B"
+sqlite:
+  db: score.db

@@ -1,2 +1,54 @@
 # security-score-compare
-Simple tool to watch and compare progress on security learning platforms such as http://root-me.org/ or https://ringzer0ctf.com/
+Tool to compare score on security learning platforms such as http://root-me.org/
+or https://ringzer0ctf.com/ between different users.
+
+Description
+---------
+Security Score Compare is simple tool to watch  and progress on security
+learning platforms such as http://root-me.org/ or https://ringzer0ctf.com/.
+Dedicated to small groups of friends or colleagues from the same company.
+
+Intended to run from cron, stores data to SQLite database. Easily configurable
+by editing YAML file.
+
+Requirements
+---------
+- Python 2.7
+- modules listed in requirements.txt
+
+Configuration
+---------
+Configuration is performed by YAML configruation file, which can be specified
+by *--config* parameter. Example configuration is provided in *example.yaml*.
+
+It has two main blocks: *platforms* and *sqlite*
+
+The first one contains data about security platforms - how to get the score and
+which user data to fetch.
+
+The second one contains SQLite file location.
+
+Usage
+---------
+- clone this repository
+- pip install -r requirements.txt
+- adjust config file (see example.yaml)
+- run the script with --dryrun (-d) option
+- if everything goes well, add to crontab
+- create database with following schema:
+
+  CREATE TABLE score (
+          timestamp default current_timestamp,
+          platform text,
+          nick text,
+          score integer
+  );
+
+Contribution
+---------
+Help is always welcome, so clone this repository, send pull requests or create
+issues if you find any bugs.
+
+License
+---------
+See LICENSE file
