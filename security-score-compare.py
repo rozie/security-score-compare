@@ -63,7 +63,7 @@ def store_to_db(dbfile, platform, nick, score):
     try:
         conn = sqlite3.connect(dbfile)
         cur = conn.cursor()
-        query = """INSERT INTO score (platform, nick, score VALUES (?, ?, ?)"""
+        query = """INSERT INTO score (platform, nick, score) VALUES (?, ?, ?)"""
         cur.execute(query, (platform, nick, score))
         conn.commit()
     except Exception as e:
