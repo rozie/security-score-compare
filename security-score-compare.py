@@ -24,10 +24,11 @@ def get_data_from_db(dbfile, days, platform):
     try:
         conn = sqlite3.connect(dbfile)
         cur = conn.cursor()
-        query = """SELECT  DISTINCT substr(timestamp, 1, 10), nick, score
+        query = """SELECT  DISTINCT substr(timestamp, 1, 10), nick, max(score)
                 FROM score WHERE platform=?
                 AND timestamp > datetime('now', ?)
-                ORDER BY timestamp;"""
+                GROUP BY substr(timestamp, 1, 10), nick
+                ORDER BY score;"""
         cur.execute(query, (platform, day_query))
         rows = cur.fetchall()
         dates_tmp = set()
@@ -40,7 +41,9 @@ def get_data_from_db(dbfile, days, platform):
                 nicks_tmp[nick].append(score)
             else:
                 nicks_tmp[nick].append(score)
+        logging.debug("dates %s", dates_tmp)
         data['dates'] = list(dates_tmp)
+        data['dates'].sort()
         data['scores'] = nicks_tmp
         # pad missing with zeros
         for nick in data.get('scores'):
@@ -116,7 +119,7 @@ def main():
         data = get_data_from_db(dbfile, args.time, args.platform)
         x_axis = data.get('dates')
         print(x_axis)
-        fig = plt.figure()
+        fig = plt.figure(figsize=(12,6))
         ax = plt.subplot(111)
         for nick in data.get('scores'):
             values = data['scores'][nick]
