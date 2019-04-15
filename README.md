@@ -43,6 +43,10 @@ Usage
           nick text,
           score integer
   );
+- To draw a chart for rootme platform and last 7 days:
+
+ security-score-compare.py -p -t 7 -P rootme -o /var/www/7_days_rootme.png
+
 
 Contribution
 ---------
