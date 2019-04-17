@@ -121,6 +121,7 @@ def main():
         print(x_axis)
         fig = plt.figure(figsize=(12,6))
         ax = plt.subplot(111)
+        plt.title(args.platform)
         for nick in data.get('scores'):
             values = data['scores'][nick]
             print(nick, values)
