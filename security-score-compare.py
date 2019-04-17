@@ -49,7 +49,8 @@ def get_data_from_db(dbfile, days, platform):
         for nick in data.get('scores'):
             days_of_data = int(len(data['scores'][nick]))
             dates_count = int(len(data['dates']))
-            print(nick, days_of_data, dates_count)
+            logging.debug("Nick %s, days with data %s days %s",
+                          nick, days_of_data, dates_count)
             if days_of_data < dates_count:
                 data['scores'][nick] = ([0] * (dates_count - days_of_data)) + data['scores'][nick]
     except Exception as e:
@@ -118,13 +119,13 @@ def main():
     if args.plot:
         data = get_data_from_db(dbfile, args.time, args.platform)
         x_axis = data.get('dates')
-        print(x_axis)
-        fig = plt.figure(figsize=(12,6))
+        logging.debug("X axis values: %s", x_axis)
+        fig = plt.figure(figsize=(16,6))
         ax = plt.subplot(111)
         plt.title(args.platform)
         for nick in data.get('scores'):
             values = data['scores'][nick]
-            print(nick, values)
+            logging.debug("Nick: %s values: %s", nick, values)
             ax.plot(x_axis, values, label=nick)
         plt.legend(loc=3)
         fig.savefig(args.output)
