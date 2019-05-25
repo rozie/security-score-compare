@@ -9,5 +9,10 @@ platforms:
     nicks:
      nick_A: "https://ringzer0ctf.com/profile/XXXX/nick_A"
      nick_B: "https://ringzer0ctf.com/profile/YYYY/nick_B"
+  hackthebox:
+    regexp: 'is at position (\d+) in the Hall of Fame\.'
+    nicks:
+      nick_A: "https://www.hackthebox.eu/profile/XXXXX"
+      nick_A: "https://www.hackthebox.eu/profile/YYYYY"
 sqlite:
   db: score.db

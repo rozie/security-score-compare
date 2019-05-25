@@ -1,11 +1,12 @@
 # security-score-compare
-Tool to compare score on security learning platforms such as http://root-me.org/
-or https://ringzer0ctf.com/ between different users.
+Tool to compare score on security learning platforms such as http://root-me.org/,
+https://ringzer0ctf.com/ or https://www.hackthebox.eu/between different users.
 
 Description
 ---------
 Security Score Compare is simple tool to watch  and progress on security
-learning platforms such as http://root-me.org/ or https://ringzer0ctf.com/.
+learning platforms such as http://root-me.org/, https://ringzer0ctf.com/ or
+https://www.hackthebox.eu/.
 Dedicated to small groups of friends or colleagues from the same company.
 
 Intended to run from cron, stores data to SQLite database. Easily configurable
@@ -13,7 +14,7 @@ by editing YAML file.
 
 Requirements
 ---------
-- Python 2.7
+- Python 3.5 (or newer)
 - modules listed in requirements.txt
 
 Configuration
@@ -43,9 +44,15 @@ Usage
           nick text,
           score integer
   );
-- To draw a chart for rootme platform and last 7 days:
 
+
+- To draw a chart for rootme platform and last 7 days:
    security-score-compare.py -p -t 7 -P rootme -o /var/www/7_days_rootme.png
+
+Notice
+---------
+For https://www.hackthebox.eu/ works only for public profiles and returns
+Hall of Fame position instead of score.
 
 
 Contribution
