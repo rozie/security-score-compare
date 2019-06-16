@@ -125,8 +125,9 @@ def main():
         plt.title(args.platform)
         for nick in data.get('scores'):
             values = data['scores'][nick]
+            display_nick = "{}: {}".format(nick, max(values))
             logging.debug("Nick: %s values: %s", nick, values)
-            ax.plot(x_axis, values, label=nick)
+            ax.plot(x_axis, values, label=display_nick)
         plt.legend(loc=3)
         fig.savefig(args.output)
 
