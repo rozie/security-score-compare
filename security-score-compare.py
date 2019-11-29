@@ -5,6 +5,7 @@ import argparse
 import logging
 import re
 import sqlite3
+import time
 
 import matplotlib
 matplotlib.use('agg')
@@ -136,6 +137,7 @@ def main():
         tmpplatforms = data['platforms']
         for platform in tmpplatforms:
             regexp = tmpplatforms[platform]['regexp']
+            delay = tmpplatforms[platform].get('delay', 0)
             logging.debug("%s regexp %s", platform, regexp)
             tmpnicks = tmpplatforms[platform]['nicks']
             for nick in tmpnicks:
@@ -146,6 +148,7 @@ def main():
                 score = get_score(regexp, data)
                 logging.info("The score for nick %s on platform %s is %s",
                              nick, platform, score)
+                time.sleep(delay)
                 if not args.dryrun:
                     if score:
                         store_to_db(dbfile=dbfile, platform=platform,

@@ -1,6 +1,7 @@
 platforms:
   rootme:
-    regexp: 'Score.*?<span>(\d+)</span>'
+    delay: 1
+    regexp: 'squelettes\/img\/valid.svg.*grayscale.*nbsp;(\d+)</h3>'
     nicks:
       nick_A: "https://www.root-me.org/XXX-nick_A"
       nick_B: "https://www.root-me.org/XXX-nick_B"
@@ -10,6 +11,7 @@ platforms:
      nick_A: "https://ringzer0ctf.com/profile/XXXX/nick_A"
      nick_B: "https://ringzer0ctf.com/profile/YYYY/nick_B"
   hackthebox:
+    delay: 1
     regexp: 'is at position (\d+) in the Hall of Fame\.'
     nicks:
       nick_A: "https://www.hackthebox.eu/profile/XXXXX"
