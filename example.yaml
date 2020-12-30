@@ -1,11 +1,12 @@
 platforms:
   rootme:
-    delay: 1
+    delay: 8
     regexp: 'squelettes\/img\/valid.svg.*grayscale.*nbsp;(\d+)</h3>'
     nicks:
       nick_A: "https://www.root-me.org/XXX-nick_A"
       nick_B: "https://www.root-me.org/XXX-nick_B"
   ringzeroctf:
+    delay: 1
     regexp: 'Points.*?<span class="points">(\d+)</span>'
     nicks:
      nick_A: "https://ringzer0ctf.com/profile/XXXX/nick_A"
@@ -16,5 +17,11 @@ platforms:
     nicks:
       nick_A: "https://www.hackthebox.eu/profile/XXXXX"
       nick_A: "https://www.hackthebox.eu/profile/YYYYY"
+  ctflearn:
+    delay: 1
+    regexp: '<p><b>(\d+)</b> points</p>'
+    nicks:
+      nick_A: "https://ctflearn.com/user/nick_A"
+      nick_B: "https://ctflearn.com/user/nick_B"
 sqlite:
   db: score.db

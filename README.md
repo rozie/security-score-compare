@@ -1,16 +1,24 @@
 # security-score-compare
 Tool to compare score on security learning platforms such as http://root-me.org/,
-https://ringzer0ctf.com/ or https://www.hackthebox.eu/between different users.
+https://ringzer0ctf.com/, https://www.hackthebox.eu/ and https://ctflearn.com/
+between different users.
 
 Description
 ---------
-Security Score Compare is simple tool to watch  and progress on security
-learning platforms such as http://root-me.org/, https://ringzer0ctf.com/ or
-https://www.hackthebox.eu/.
-Dedicated to small groups of friends or colleagues from the same company.
+Security Score Compare is simple tool to watch and compare progress on security
+learning platforms. Dedicated to small groups of friends or colleagues from the
+same company.
+Consist of two parts or modes. One for gathering scores, one for plotting graphs.
 
 Intended to run from cron, stores data to SQLite database. Easily configurable
 by editing YAML file.
+
+Supported platforms
+---------
+- http://root-me.org/
+- https://ringzer0ctf.com/
+- https://www.hackthebox.eu/
+- https://ctflearn.com/
 
 Requirements
 ---------
