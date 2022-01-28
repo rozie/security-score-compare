@@ -1,7 +1,7 @@
 platforms:
   rootme:
     delay: 8
-    regexp: 'squelettes\/img\/valid.svg.*grayscale.*nbsp;(\d+)</h3>'
+    regexp: 'squelettes\/img\/valid.svg.*nbsp;(\d+)</h3>'
     nicks:
       nick_A: "https://www.root-me.org/XXX-nick_A"
       nick_B: "https://www.root-me.org/XXX-nick_B"
@@ -19,7 +19,7 @@ platforms:
       nick_A: "https://www.hackthebox.eu/profile/YYYYY"
   ctflearn:
     delay: 1
-    regexp: '<p><b>(\d+)</b> points</p>'
+    regexp: '(\d+)<span class="text-white-50">&nbsp;points</span>'
     nicks:
       nick_A: "https://ctflearn.com/user/nick_A"
       nick_B: "https://ctflearn.com/user/nick_B"
