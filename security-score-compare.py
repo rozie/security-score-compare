@@ -8,10 +8,10 @@ import sqlite3
 import time
 
 import matplotlib
-matplotlib.use('agg')
+
+matplotlib.use("agg")
 import matplotlib.pyplot as plt
 import requests
-
 import yaml
 
 logger = logging.getLogger(__name__)
@@ -21,7 +21,7 @@ def get_data_from_db(dbfile, days, platform):
     con = None
     data = {}
     day_query = "-{} days".format(days)
-    #print(dbfile, days, platform)
+    # print(dbfile, days, platform)
     try:
         conn = sqlite3.connect(dbfile)
         cur = conn.cursor()
@@ -43,24 +43,26 @@ def get_data_from_db(dbfile, days, platform):
             else:
                 nicks_tmp[nick].append(score)
         logging.debug("dates %s", dates_tmp)
-        data['dates'] = list(dates_tmp)
-        data['dates'].sort()
-        data['scores'] = nicks_tmp
+        data["dates"] = list(dates_tmp)
+        data["dates"].sort()
+        data["scores"] = nicks_tmp
         # pad missing with zeros
-        for nick in data.get('scores'):
-            days_of_data = int(len(data['scores'][nick]))
-            dates_count = int(len(data['dates']))
-            logging.debug("Nick %s, days with data %s days %s",
-                          nick, days_of_data, dates_count)
+        for nick in data.get("scores"):
+            days_of_data = int(len(data["scores"][nick]))
+            dates_count = int(len(data["dates"]))
+            logging.debug(
+                "Nick %s, days with data %s days %s", nick, days_of_data, dates_count
+            )
             if days_of_data < dates_count:
-                data['scores'][nick] = ([0] * (dates_count - days_of_data)) + data['scores'][nick]
+                data["scores"][nick] = ([0] * (dates_count - days_of_data)) + data[
+                    "scores"
+                ][nick]
     except Exception as e:
         logging.error("DB oparation failed %s", e)
     finally:
         if con:
             con.close()
     return data
-
 
 
 def store_to_db(dbfile, platform, nick, score):
@@ -93,8 +95,13 @@ def get_score(regexp, text):
     for line in text:
         m = re.search(regexp, line)
         if m:
-            score = m.group(1)
-            break
+            try:
+                score = int(m.group(1))
+                break
+            except Exception as e:
+                logger.debug(
+                    "Couldn't convert score for %s because of %s", m.group(1), e
+                )
     return score
 
 
@@ -114,18 +121,18 @@ def main():
     except Exception as e:
         logger.error("Couldn't read config file %s", e)
 
-    dbfile = data.get('sqlite', {}).get('db', 'score.db')
+    dbfile = data.get("sqlite", {}).get("db", "score.db")
 
     # draw a chart
     if args.plot:
         data = get_data_from_db(dbfile, args.time, args.platform)
-        x_axis = data.get('dates')
+        x_axis = data.get("dates")
         logging.debug("X axis values: %s", x_axis)
-        fig = plt.figure(figsize=(16,6))
+        fig = plt.figure(figsize=(16, 6))
         ax = plt.subplot(111)
         plt.title(args.platform)
-        for nick in data.get('scores'):
-            values = data['scores'][nick]
+        for nick in data.get("scores"):
+            values = data["scores"][nick]
             display_nick = "{}: {}".format(nick, max(values))
             logging.debug("Nick: %s values: %s", nick, values)
             ax.plot(x_axis, values, label=display_nick)
@@ -134,65 +141,78 @@ def main():
 
     # grab data from all platforms
     else:
-        tmpplatforms = data['platforms']
+        tmpplatforms = data["platforms"]
         for platform in tmpplatforms:
-            regexp = tmpplatforms[platform]['regexp']
-            delay = tmpplatforms[platform].get('delay', 0)
+            regexp = tmpplatforms[platform]["regexp"]
+            delay = tmpplatforms[platform].get("delay", 0)
             logging.debug("%s regexp %s", platform, regexp)
-            tmpnicks = tmpplatforms[platform]['nicks']
+            tmpnicks = tmpplatforms[platform]["nicks"]
             for nick in tmpnicks:
                 score = None
                 url = tmpnicks[nick]
                 logging.debug("Nick: %s URL: %s", nick, url)
                 data = get_data(url).splitlines()
                 score = get_score(regexp, data)
-                logging.info("The score for nick %s on platform %s is %s",
-                             nick, platform, score)
+                logging.debug(
+                    "The score for nick %s on platform %s is %s", nick, platform, score
+                )
                 time.sleep(delay)
                 if not args.dryrun:
-                    if score:
-                        store_to_db(dbfile=dbfile, platform=platform,
-                                    nick=nick, score=score)
-                    else:
-                        logging.error("Can't get score for %s, %s", nick, url)
+                    store_to_db(
+                        dbfile=dbfile, platform=platform, nick=nick, score=score
+                    )
 
 
 def parse_arguments():
-    parser = argparse.ArgumentParser(
-        description='Security Score Compare')
+    parser = argparse.ArgumentParser(description="Security Score Compare")
     parser.add_argument(
-        '-d', '--dryrun', required=False,
-        default=False, action='store_true',
-        help="Just print data, don't change anything")
+        "-d",
+        "--dryrun",
+        required=False,
+        default=False,
+        action="store_true",
+        help="Just print data, don't change anything",
+    )
     parser.add_argument(
-        '-v', '--verbose', required=False,
-        default=False, action='store_true',
-        help="Provide verbose output")
+        "-v",
+        "--verbose",
+        required=False,
+        default=False,
+        action="store_true",
+        help="Provide verbose output",
+    )
     parser.add_argument(
-        '-c', '--config', required=False,
+        "-c",
+        "--config",
+        required=False,
         default="example.yaml",
-        help="Configuration file")
+        help="Configuration file",
+    )
     parser.add_argument(
-        '-p', '--plot', required=False,
-        default=False, action='store_true',
-        help="Plot a chart")
+        "-p",
+        "--plot",
+        required=False,
+        default=False,
+        action="store_true",
+        help="Plot a chart",
+    )
     parser.add_argument(
-        '-t', '--time', required=False, type=int,
-        default=7,
-        help="How many days")
+        "-t", "--time", required=False, type=int, default=7, help="How many days"
+    )
     parser.add_argument(
-        '-o', '--output', required=False,
-        default='output.png',
-        help="Output chart file")
+        "-o", "--output", required=False, default="output.png", help="Output chart file"
+    )
     parser.add_argument(
-        '-P', '--platform', required=False,
-        default='rootme',
-        help="Platform to make chart for"
+        "-P",
+        "--platform",
+        required=False,
+        default="rootme",
+        help="Platform to make chart for",
     )
 
     args = parser.parse_args()
     return args
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
