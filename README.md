@@ -57,11 +57,12 @@ Usage
 - To draw a chart for rootme platform and last 7 days:
    security-score-compare.py -p -t 7 -P rootme -o /var/www/7_days_rootme.png
 
-Notice
+Notices
 ---------
-For https://www.hackthebox.eu/ works only for public profiles and returns
+- For https://www.hackthebox.eu/ works only for public profiles and returns
 Hall of Fame position instead of score.
-
+- If you use root-me.org, use API instead of HTML. Scraping HTML is no longer
+reliable, leaving it only as fallback.
 
 Contribution
 ---------
