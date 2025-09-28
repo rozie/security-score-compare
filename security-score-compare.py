@@ -105,6 +105,21 @@ def get_score(regexp, text):
     return score
 
 
+def get_rootme_score_api(nick, apikey, uid):
+    url = f"https://api.www.root-me.org/auteurs/{uid}"
+    cookies = {"api_key": apikey}
+    score = None
+    try:
+        r = requests.get(url, cookies=cookies, timeout=15)
+        res = r.json()
+        score = res.get("score")
+    except (requests.HTTPError, requests.ConnectionError) as e:
+        raise RuntimeError(str(e))
+    except (ValueError, TypeError) as e:
+        raise RuntimeError(str(e))
+    return score
+
+
 def main():
     args = parse_arguments()
 
@@ -142,6 +157,7 @@ def main():
     # grab data from all platforms
     else:
         tmpplatforms = data["platforms"]
+        rootme_apikey = tmpplatforms.get("rootme", {}).get("apikey")
         for platform in tmpplatforms:
             regexp = tmpplatforms[platform]["regexp"]
             delay = tmpplatforms[platform].get("delay", 0)
@@ -149,10 +165,21 @@ def main():
             tmpnicks = tmpplatforms[platform]["nicks"]
             for nick in tmpnicks:
                 score = None
-                url = tmpnicks[nick]
-                logging.debug("Nick: %s URL: %s", nick, url)
-                data = get_data(url).splitlines()
-                score = get_score(regexp, data)
+                # try to use API for rootme if UID and API key are given
+                if platform == "rootme":
+                    if rootme_apikey:
+                        uid = tmpplatforms[platform].get("uids", {}).get(nick)
+                        if uid:
+                            logging.debug("Fetching score for rootme with apikey for %s", nick)
+                            score = get_rootme_score_api(nick=nick, apikey=rootme_apikey, uid=uid)
+                            logging.debug("Got score for %s with API on rootme: %s", nick, score)
+                        else:
+                            logging.debug("No rootme UID with for %s", nick)
+                if not score:
+                    url = tmpnicks[nick]
+                    logging.debug("Nick: %s URL: %s", nick, url)
+                    data = get_data(url).splitlines()
+                    score = get_score(regexp, data)
                 logging.debug(
                     "The score for nick %s on platform %s is %s", nick, platform, score
                 )

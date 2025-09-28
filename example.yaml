@@ -1,10 +1,15 @@
 platforms:
   rootme:
+    apikey: null
     delay: 8
     regexp: 'squelettes\/img\/valid.svg.*nbsp;(\d+)</h3>'
+    uids:
+      nick_A: 1234
+      nick_B: 1235
     nicks:
       nick_A: "https://www.root-me.org/XXX-nick_A"
       nick_B: "https://www.root-me.org/XXX-nick_B"
+      nick_C: "https://www.root-me.org/XXX-nick_C"
   ringzeroctf:
     delay: 1
     regexp: 'Points.*?<span class="points">(\d+)</span>'
